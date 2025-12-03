@@ -7,7 +7,7 @@ export default function Song(){
                 <div className="relative w-full rounded-lg overflow-hidden shadow-2xl" style={{paddingBottom: '56.25%'}}>
                     <iframe
                         className="absolute top-0 left-0 w-full h-full"
-                        src="https://www.youtube.com/embed/cWp2kWgRPNQ?autoplay=1&mute=1"
+                        src="https://www.youtube.com/embed/cWp2kWgRPNQ?autoplay=1"
                         title="자동 재생 영상"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen

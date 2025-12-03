@@ -6,7 +6,7 @@ export default function Letter() {
 
   return (
     <div className="flex flex-col items-center justify-center py-10 min-h-[800px] px-4">
-      <div className="relative w-full max-w-3xl flex items-center justify-center md:-mt-60 -mt-120">
+      <div className="relative w-full max-w-3xl flex items-center justify-center md:-mt-60 -mt-80">
         {/* 스케치 스타일 봉투 */}
         <motion.div
           className="relative cursor-pointer group w-full"

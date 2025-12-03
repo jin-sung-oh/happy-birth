@@ -2,6 +2,8 @@ import { useSearchParams } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import TabWrapper from "../components/TabWrapper";
 import dadphoto from "../assets/images/mam-dad.jpeg";
+import { useEffect } from "react";
+import confetti from "canvas-confetti";
 
 export default function Main(){
 
@@ -19,6 +21,43 @@ export default function Main(){
 
     // derive active directly from the URL to avoid sync issues
     const active = safeIndex;
+
+    // 홈 페이지로 올 때마다 폭죽 애니메이션
+    useEffect(() => {
+        // 홈 페이지가 아니면 폭죽 안 터뜨림
+        if (param) return;
+
+        const duration = 3000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+        function randomInRange(min: number, max: number) {
+            return Math.random() * (max - min) + min;
+        }
+
+        const interval = setInterval(function() {
+            const timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+
+            const particleCount = 50 * (timeLeft / duration);
+
+            confetti({
+                ...defaults,
+                particleCount,
+                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+            });
+            confetti({
+                ...defaults,
+                particleCount,
+                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+            });
+        }, 250);
+
+        return () => clearInterval(interval);
+    }, [param]);
 
     // 탭에 따른 타이틀
     const getTitle = () => {
