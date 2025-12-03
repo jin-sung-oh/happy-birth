@@ -7,8 +7,8 @@ export default function Gift() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <section>
-      <article className="grid grid-cols-2 gap-20 p-6 mt-16">
+    <section className="px-4">
+      <article className="grid md:grid-cols-2 grid-cols-1 md:gap-20 gap-10 p-6 mt-16 max-w-4xl mx-auto">
         <img
           src={shimg}
           alt="Gift 1"
@@ -17,11 +17,11 @@ export default function Gift() {
         />
         <img
           src={shimg}
-          alt="Gift 1"
+          alt="Gift 2"
           className="w-full border-3 border-dashed border-blue-700 p-1 aspect-square object-cover cursor-pointer rounded-full shadow-md hover:opacity-90 transition-opacity"
           onClick={() => setSelectedImage(shletter)}
         />
-     
+
       </article>
 
       {/* 이미지 모달 */}

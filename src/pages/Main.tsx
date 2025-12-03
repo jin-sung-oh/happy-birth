@@ -32,16 +32,16 @@ export default function Main(){
     }
 
     return(
-        <main className="bg-blue-100  h-full min-h-screen p-4"> 
+        <main className="bg-blue-100 h-full min-h-screen md:p-4 p-2">
         <section className="pb-10 container mx-auto">
-            
-            <h1 className="text-3xl font-semibold text-center py-24">{getTitle()}</h1>
+
+            <h1 className="md:text-3xl text-xl font-semibold text-center md:py-24 py-12 px-4">{getTitle()}</h1>
             <section>
-                <div role="tablist" className=" grid grid-cols-5 gap-24 justify-self-center text-center text-2xl font-medium">
-                    <Button 
+                <div role="tablist" className="grid md:grid-cols-5 grid-cols-3 md:gap-24 gap-4 justify-center text-center md:text-2xl text-base font-medium px-4">
+                    <Button
                         onClick={handleOnClickHome}
                         className={
-                            "cursor-pointer w-fit px-12 transition-all text-xl font-semibold " +
+                            "cursor-pointer w-full md:w-fit md:px-12 px-4 py-2 transition-all md:text-xl text-sm font-semibold " +
                             (!param
                                 ? "text-blue-400 rounded-md"
                                 : "")
@@ -56,7 +56,7 @@ export default function Main(){
                             aria-selected={!!(param && active === i)}
                             onClick={() => setSearchParams({ tab: t.key })}
                             className={
-                                "cursor-pointer w-fit px-12 transition-all text-xl font-semibold " +
+                                "cursor-pointer w-full md:w-fit md:px-12 px-4 py-2 transition-all md:text-xl text-sm font-semibold " +
                                 (param && active === i
                                     ? " text-blue-400 rounded-md"
                                     : "")
@@ -69,8 +69,8 @@ export default function Main(){
                 </div>
 
                 {param && <TabWrapper active={active} />}
-                {!param && <img src={dadphoto} alt="Dad's Photo" className="mx-auto mt-20 w-200 rounded-lg shadow-lg" />}
-               
+                {!param && <img src={dadphoto} alt="Dad's Photo" className="mx-auto mt-20 max-w-full md:w-[800px] w-full rounded-lg shadow-lg px-4" />}
+
             </section>
          </section>
          </main>
