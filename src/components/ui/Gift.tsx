@@ -2,11 +2,19 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import shimg from "../../assets/images/sh-img.jpeg";
 import shletter from "../../assets/images/sh-letter.jpeg";
+import chimg from "../../assets/images/ch-img.jpeg";
+import chletter1 from "../../assets/images/ch-letter-1.jpeg";
+import chletter2 from "../../assets/images/ch-letter-2.jpeg";
+import chletter3 from "../../assets/images/ch-letter-3.jpeg";
+
 
 export default function Gift() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [currentGiftName, setCurrentGiftName] = useState<string>("");
+  const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
+
+  const chLetters = [chletter1, chletter2, chletter3];
 
   const handleImageClick = (giftName: string) => {
     setCurrentGiftName(giftName);
@@ -15,12 +23,38 @@ export default function Gift() {
 
   const handleConfirm = () => {
     setShowConfirmModal(false);
-    setSelectedImage(shletter);
+    if (currentGiftName === "허승훈") {
+      setSelectedImage(shletter);
+    } else if (currentGiftName === "김채희") {
+      setCurrentLetterIndex(0);
+      setSelectedImage(chLetters[0]);
+    }
   };
 
   const handleCancel = () => {
     setShowConfirmModal(false);
     setCurrentGiftName("");
+  };
+
+  const handleNextLetter = () => {
+    if (currentGiftName === "김채희" && currentLetterIndex < chLetters.length - 1) {
+      const nextIndex = currentLetterIndex + 1;
+      setCurrentLetterIndex(nextIndex);
+      setSelectedImage(chLetters[nextIndex]);
+    }
+  };
+
+  const handlePrevLetter = () => {
+    if (currentGiftName === "김채희" && currentLetterIndex > 0) {
+      const prevIndex = currentLetterIndex - 1;
+      setCurrentLetterIndex(prevIndex);
+      setSelectedImage(chLetters[prevIndex]);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+    setCurrentLetterIndex(0);
   };
 
   return (
@@ -33,7 +67,7 @@ export default function Gift() {
           onClick={() => handleImageClick("허승훈")}
         />
         <img
-          src={shimg}
+          src={chimg}
           alt="Gift 2"
           className="w-full border-3 border-dashed border-blue-700 p-1 aspect-square object-cover cursor-pointer rounded-full shadow-md hover:opacity-90 transition-opacity"
           onClick={() => handleImageClick("김채희")}
@@ -131,18 +165,72 @@ export default function Gift() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-            onClick={() => setSelectedImage(null)}
+            onClick={handleCloseModal}
           >
-            <motion.img
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              src={selectedImage}
-              alt="확대 이미지"
-              className="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl cursor-pointer"
-              onClick={() => setSelectedImage(null)}
-            />
+            <div className="relative flex items-center justify-center w-full h-full" onClick={(e) => e.stopPropagation()}>
+              {/* 이전 버튼 - 김채희 편지이고 첫 번째가 아닐 때만 표시 */}
+              {currentGiftName === "김채희" && currentLetterIndex > 0 && (
+                <button
+                  onClick={handlePrevLetter}
+                  className="absolute left-4 z-10 bg-white/90 hover:bg-white text-gray-800 md:w-12 md:h-12 w-10 h-10 rounded-full shadow-lg transition-all hover:scale-110 active:scale-95 flex items-center justify-center"
+                >
+                  <span className="md:text-2xl text-xl">←</span>
+                </button>
+              )}
+
+              {/* 이미지 */}
+              <motion.img
+                key={selectedImage}
+                initial={{ scale: 0.8, opacity: 0, x: 100 }}
+                animate={{ scale: 1, opacity: 1, x: 0 }}
+                exit={{ scale: 0.8, opacity: 0, x: -100 }}
+                transition={{ duration: 0.3 }}
+                drag={currentGiftName === "김채희" ? "x" : false}
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={(_, { offset, velocity }) => {
+                  const swipeThreshold = 50; // 50px 이상 드래그
+                  const velocityThreshold = 500; // 속도 기준
+
+                  // 빠르게 스와이프하거나 충분히 드래그한 경우
+                  if (offset.x < -swipeThreshold || velocity.x < -velocityThreshold) {
+                    handleNextLetter();
+                  } else if (offset.x > swipeThreshold || velocity.x > velocityThreshold) {
+                    handlePrevLetter();
+                  }
+                }}
+                src={selectedImage}
+                alt="확대 이미지"
+                className="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl cursor-pointer"
+                onClick={handleCloseModal}
+              />
+
+              {/* 다음 버튼 - 김채희 편지이고 마지막이 아닐 때만 표시 */}
+              {currentGiftName === "김채희" && currentLetterIndex < chLetters.length - 1 && (
+                <button
+                  onClick={handleNextLetter}
+                  className="absolute right-4 z-10 bg-white/90 hover:bg-white text-gray-800 md:w-12 md:h-12 w-10 h-10 rounded-full shadow-lg transition-all hover:scale-110 active:scale-95 flex items-center justify-center"
+                >
+                  <span className="md:text-2xl text-xl">→</span>
+                </button>
+              )}
+
+              {/* 페이지 인디케이터 - 김채희 편지일 때만 표시 */}
+              {currentGiftName === "김채희" && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                  {chLetters.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`md:w-3 md:h-3 w-2 h-2 rounded-full transition-all ${
+                        index === currentLetterIndex
+                          ? "bg-white scale-110"
+                          : "bg-white/40"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
